@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Поиск по имени и фильтрация по стране</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Список пользователей</h1>
+
+    <div>
+        <label for="search-input">Поиск по имени:</label>
+        <input type="text" id="search-input" onkeyup="searchUsers()">
+    </div>
+
+    <div>
+        <label for="country-select">Фильтр по стране:</label>
+        <select id="country-select" onchange="filterUsers()">
+            <option value="">Все страны</option>
+            </select>
+    </div>
+
+    <table id="users-table">
+        <thead>
+            <tr>
+                <th>Имя</th>
+                <th>Страна</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+    <script>
+        let users = []; // Массив пользователей (будет заполнен данными с API)
+        let j='j.json';
+        // Получение данных с API (замените URL на свой)
+        fetch(j)
+            .then(response => response.json())
+            .then(data => {
+                users = data;
+                populateTable(); // Заполняем таблицу данными
+                populateCountries(); // Заполняем список стран
+            })
+            .catch(error => console.error('Ошибка при получении данных:', error));
+
+        // Заполнение таблицы данными
+        function populateTable() {
+            const tableBody = document.getElementById('users-table').getElementsByTagName('tbody')[0];
+            tableBody.innerHTML = ''; // Очищаем таблицу
+
+            users.forEach(user => {
+                const row = tableBody.insertRow();
+                const nameCell = row.insertCell();
+                const countryCell = row.insertCell();
+
+                nameCell.textContent = user.last_name;
+                countryCell.textContent = user.country;
+            });
+        }
+
+        // Заполнение списка стран
+        function populateCountries() {
+            const countrySelect = document.getElementById('country-select');
+            const uniqueCountries = [...new Set(users.map(user => user.country))]; // Получаем уникальные страны
+
+            uniqueCountries.forEach(country => {
+                const option = document.createElement('option');
+                option.value = country;
+                option.text = country;
+                countrySelect.add(option);
+            });
+        }
+
+        // Функция поиска по имени
+        function searchUsers() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            const filteredUsers = users.filter(user => user.last_name.toLowerCase().includes(searchTerm));
+            populateTable(filteredUsers); // Перезаполняем таблицу отфильтрованными данными
+        }
+
+        // Функция фильтрации по стране
+        function filterUsers() {
+            const selectedCountry = document.getElementById('country-select').value;
+            const filteredUsers = selectedCountry === '' ? users : users.filter(user => user.country === selectedCountry);
+            populateTable(filteredUsers); // Перезаполняем таблицу отфильтрованными данными
+        }
+    </script>
+
+</body>
+</html>
