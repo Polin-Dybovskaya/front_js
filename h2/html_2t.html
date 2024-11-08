@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Банковский счет</title>
+</head>
+<body>
+  <h1>Банковский счет</h1>
+  <h2>Баланс: <span id="balance">100</span></h2>
+
+  <button onclick="promptForAmount()">Операция</button>
+
+  <script>
+    let balance = 100;
+
+    function promptForAmount() {
+      let amount = parseFloat(prompt("Введите сумму:"));
+      if (isNaN(amount) | (amount<0)) {
+        alert("Некорректный ввод. Пожалуйста, введите снова.");
+        return;
+      }
+
+      let operation = prompt("Выберите операцию:\n1. Внести\n2. Снять");
+
+      if (operation === "1") {
+        deposit(amount);
+      } else if (operation === "2") {
+        withdraw(amount);
+      } else {
+        alert("Неверный выбор операции.");
+      }
+    }
+
+    function deposit(amount) {
+      balance += amount;
+      updateBalance();
+      alert("Сумма успешно внесена на счет.");
+    }
+
+    function withdraw(amount) {
+      if (amount > balance) {
+        alert("Недостаточно средств на счете.");
+      } else {
+        balance -= amount;
+        updateBalance();
+        alert("Сумма успешно снята со счета.");
+      }
+    }
+
+    function updateBalance() {
+      document.getElementById("balance").textContent = balance;
+    }
+  </script>
+</body>
+</html>
