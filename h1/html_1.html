@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title> Passport</title>
+</head>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Заполнение паспорта</title>
+    <link rel="stylesheet" href="styles.css">
+  
+</head>
+<body>
+  <a id="top">
+    <div id="image-container">
+      <img src='passport.jpg' alt="Фотография">
+      <div class="block1" id="b1" style="top: 55px; left: 130px; position:relative">
+          <p >УФМС РОССИИ<br> ПО МОСКОВСКОЙ ОБЛАСТИ </p>
+      </div>
+      <div class="input-field" style="bottom: 160px; left: 160px;">
+        <input type="text" style="background: transparent; border: none" placeholder="Фамилия" id="surname">
+      </div>
+      <div class="text" style="top: 335px; left: 160px;">
+        <input type="text" style="background: transparent; border: none" placeholder="Имя" id="name">
+      </div>
+      <div class="input-field" style="top: 360px; right: 40px;">
+        <input type="text" style="background: transparent; border: none" placeholder="Отчество" id="lastname">
+      </div>
+      <div class="input-field" style="width: 22%;
+      height: 24%; bottom: 19px; left: 22px"; >
+        <img src="q.jpg" placeholder="Photo" id="photo" style="display: none;top:0"> 
+      </div>
+    </div>
+  </a>
+    <br>
+    <br>
+  <button id="for_click_all"> Показать данные </button>
+  <a id="bot">
+    <button id="insert_img"> Показать фото </button>
+    <div id="image-container-new"></div>
+  </a>
+  <script>
+    const node_for_click_all = document.getElementById("for_click_all");
+    function showPhoto() {
+      document.getElementById('photo').style.display = 'block'; 
+    }
+    const node_insert_img = document.getElementById("insert_img");
+    node_insert_img.addEventListener("click", showPhoto); 
+    function find_edit_all() {
+      document.getElementById('name').value = 'Умолк';
+      document.getElementById('lastname').value = 'Умолчанович';
+      document.getElementById('surname').value = 'Умолчанинов';
+    }
+
+    node_for_click_all.addEventListener("click", find_edit_all);
+
+    const node_for_click_name = document.getElementById("for_click_name");
+
+    function find_edit_name() {
+      document.getElementById('name').value = 'Умолк';
+    }
+
+    node_for_click_name.addEventListener("click", find_edit_name);
+
+  </script>
+</body>
+</html>

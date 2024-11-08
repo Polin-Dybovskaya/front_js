@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title> 2</title>
+</head>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>2</title>
+    <link rel="stylesheet" href="styles.css">
+  
+</head>
+<body>
+  <a id="bot">
+    <div id="image-container-new"></div>
+     <input type="number"  placeholder="Введите число" id="n">
+    <button id="insert_table"> Создать таблицу </button>
+    <table id="table" border="1" width="300" height="230"></table>
+  </a>
+  <script>
+
+    function insert_table() {
+      let table = document.querySelector('#table');
+      table.innerHTML = '';
+      let number = document.getElementById('n');
+      let n = number.value
+      for (let i = 0; i < n; i++) {
+        let tr = document.createElement('tr');
+
+        for (let j = 0; j < n; j++) {
+          let td = document.createElement('td');
+          tr.appendChild(td);
+          td.innerText = (i+1)*(j+1);
+        }
+
+        table.appendChild(tr);
+      }
+    }
+
+    const node_insert_table = document.getElementById("insert_table");
+    node_insert_table.addEventListener("click", insert_table);
+  </script>
+</body>
+</html>
