@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Проверка на палиндром</title>
+</head>
+<body>
+  <h1>Проверка на палиндром</h1>
+
+  <input type="text" id="inputString" placeholder="Введите строку">
+  <button onclick="checkPalindrome()">Проверить</button>
+  <p id="result1"></p>
+
+  <script>
+    function checkPalindrome() {
+        let resultElement = document.getElementById("result1");
+        let inputString = document.getElementById("inputString").value;
+        let reversedString = inputString.split("").reverse().join("");
+      if (inputString === reversedString) {
+        resultElement.textContent = "это палиндром.";
+      } else {
+        resultElement.textContent = "это не палиндром.";
+      }
+    }
+  </script>
+
+
+  <h1> Угадай число </h1>
+  <text> Введите диапазон </text>  
+  <input type="number" placeholder="Введите нижнюю границу интервала" min=1 max="999" id="min_n">
+  <input type="number" placeholder="Введите верхнюю границу интервала" min=2 max=1000 id="max_n">
+  <button onclick="start()">Запустить игру</button>
+  <br>
+  <text id="t"></text>
+  <input type="number" placeholder="Введите возможное число" min=1 max=1000 id="sugg" style="display:none">
+  <button onclick="tryRes()" id="sugg_but" style="display:none"> Попытать удачу</button> 
+  <p id="lifes"></p>
+
+  <script>
+    function start() {
+      
+      let resul = document.getElementById("lifes");
+      attepmt = 5;
+      resul.textContent = "Жизни "+attepmt;
+      min_n = +document.getElementById('min_n').value;
+      max_n = +document.getElementById('max_n').value;
+      if (min_n < max_n){
+          res_abs = Math.floor(Math.random () * max_n);
+          console.log(res_abs)
+          document.getElementById('t').innerText = "Число загаданно";
+          flag = false;
+          document.getElementById('sugg').style.display = "block";
+          document.getElementById('sugg_but').style.display = "block";
+      } else{
+      document.getElementById('t').innerText = `Недопустимый интервал`;    
+      };
+    }
+  function tryRes() {
+    let resul = document.getElementById("lifes");
+    res = +document.getElementById('sugg').value;
+    if (res >= min_n && res <= max_n){
+    if (attepmt == 0){
+       display_none("Попытки закончились! Вы можете ввести новый интервал и попытать удачу снова");
+    } else {
+    if (flag == false){
+        attepmt -=1;
+    if (res_abs == res){
+        alert("Поздравляем, вы угадали!");
+        flag = true;
+    } else {
+      resul.textContent = "Жизни "+attepmt;
+    }
+    } else {
+        display_none("Вы уже угадали число. Можете задать новый диапазон");
+    }
+    }
+    }else {
+        alert(`Введенное число не в заданном интервале. Введите новое число, попытка не была засчитана`);
+    }
+    
+}
+  function display_none(text){
+    document.getElementById('sugg_but').style.display = "none";
+    document.getElementById('sugg').style.display = "none";
+    document.getElementById('t').innerText = "";
+    alert(text);
+}
+  </script>
+
+<h1>Средний балл учеников</h1>
+
+<label for="names">Имена учеников (через запятую и пробел):</label>
+<input type="text" id="names"><br><br>
+
+<label for="grades">Оценки (через пробел в формате "оценка1-оценка2-оценка3"):</label>
+<input type="text" id="grades"><br><br>
+
+<button onclick="calculate()">Рассчитать</button>
+<p id="result3"></p>
+
+<script>
+  function calculate() {
+    let namesInput = document.getElementById("names").value;
+    let gradesInput = document.getElementById("grades").value;
+
+    let names = namesInput.split(", ");
+    let grades = gradesInput.split(" ");
+
+    let averageGrades = {};
+    for (let i = 0; i < names.length; i++) {
+      let gradeParts = grades[i].split("-");
+      let totalGrade = parseInt(gradeParts[0]) + parseInt(gradeParts[1]) + parseInt(gradeParts[2]);
+      averageGrades[names[i]] = totalGrade / 3;
+    }
+
+    let worstStudent = Object.keys(averageGrades).reduce((a, b) => averageGrades[a] < averageGrades[b] ? a : b);
+    document.getElementById("result3").textContent = "Самый отстающий ученик: "+worstStudent;
+  }
+</script>
+<h1>Анализ цен на продукты</h1>
+
+  <label for="products">Информация о товарах (через "; " в формате "название,цена1,цена2,цена3"):</label>
+  <input type="text" id="products"><br><br>
+
+  <button onclick="analyzePrices()">Анализировать</button>
+  <p id="result4"></p>
+
+  <script>
+    function analyzePrices() {
+      let productsInput = document.getElementById("products").value;
+
+      let productPrices = {};
+      for (let productData of productsInput.split("; ")) {
+        let parts = productData.split(",");
+        let productName = parts[0];
+        let prices = parts.slice(1).map(Number); 
+        let averagePrice = prices.reduce((sum, price) => sum + price, 0) / prices.length;
+        productPrices[productName] = averagePrice;
+      }
+
+      let sortedProducts = Object.entries(productPrices).sort((a, b) => {
+        if (a[1] === b[1]) {
+          return a[0].localeCompare(b[0]); 
+        } else {
+          return a[1] - b[1]; 
+        }
+      });
+
+      let resultElement = document.getElementById("result4");
+      resultElement.textContent = sortedProducts.map(product => product[0]).join("\n");
+    }
+  </script>
+  <h1>Анализ прибыли по товарам</h1>
+
+  <textarea id="salesData" rows="8" cols="50" placeholder="Введите данные о продажах (по одной строке):
+Товар1,100
+Товар2,50
+...
+END"></textarea><br><br>
+
+  <button onclick="analyzeSales()">Анализировать</button>
+  <p id="result5"></p>
+
+  <script>
+    function analyzeSales() {
+      let salesData = document.getElementById("salesData").value.trim().split("\n");
+
+      let productProfits = {};
+      let mostProfitableProduct = "";
+      let maxProfit = 0;
+
+      for (let i = 0; i < salesData.length; i++) {
+        if (salesData[i] === "END") {
+          break;
+        }
+        let [productName, profitStr] = salesData[i].split(",");
+        let profit = parseInt(profitStr);
+
+        if (productName in productProfits) {
+          productProfits[productName] += profit;
+        } else {
+          productProfits[productName] = profit;
+        }
+
+        if (productProfits[productName] > maxProfit) {
+          mostProfitableProduct = productName;
+          maxProfit = productProfits[productName];
+        }
+      }
+
+      document.getElementById("result5").textContent = mostProfitableProduct+","+maxProfit;
+    }
+    
+  </script>
+
+  <h1>Анализ концертов</h1>
+
+  <textarea id="concertData" rows="8" cols="50" placeholder="Введите данные о концертах (по одной строке):
+Группа1,01.07.2023
+Группа2,15.08.2023
+...
+END"></textarea><br><br>
+
+  <button onclick="analyzeConcerts()">Анализировать</button>
+  <p id="result6"></p>
+
+  <script>
+    function analyzeConcerts() {
+      let concertData = document.getElementById("concertData").value.trim().split("\n");
+
+      let groupConcerts = {};
+      let mostConcertsGroup = "";
+      let maxConcerts = 0;
+
+      for (let i = 0; i < concertData.length; i++) {
+        if (concertData[i] === "END") {
+          break;
+        }
+        let [groupName, concertDate] = concertData[i].split(",");
+        let year = parseInt(concertDate.split(".").pop());
+
+        if (year === 2023) {
+          if (groupName in groupConcerts) {
+            groupConcerts[groupName]++;
+          } else {
+            groupConcerts[groupName] = 1;
+          }
+
+          if (groupConcerts[groupName] > maxConcerts) {
+            mostConcertsGroup = groupName;
+            maxConcerts = groupConcerts[groupName];
+          }
+        }
+      }
+
+      document.getElementById("result6").textContent = "Группа с наибольшим количеством концертов в 2023 году:"+ mostConcertsGroup+' '+maxConcerts;
+    }
+  </script>
+</body>
+</html>
